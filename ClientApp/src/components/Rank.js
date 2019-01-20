@@ -39,7 +39,7 @@ function renderCatsRank(props) {
         <ul>
             {props.cats.map(cat =>
                 <li key={cat.key}>
-                    <img src={cat.imageUrl} alt="cat pic" />
+                    <img src={cat.urlImage} alt="cat pic" />
                 </li>
             )}
         </ul>
