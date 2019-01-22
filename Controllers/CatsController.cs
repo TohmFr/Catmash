@@ -3,40 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using catmash.Model;
 namespace catmash.Controllers
 {
     [Route("api/[controller]")]
     public class CatsController : Controller
     {
         [HttpGet("[action]")]
-        public IEnumerable<Cats> Rank(int page =0)
+        public IEnumerable<Cat> Rank(int page = 0)
         {
-            //test Value
-            var cats = new List<Cats>
+            IEnumerable<Cat> result = null;
+            using (var dbCtx = new CatmashContext())
             {
-                new Cats()
-                {
-                    ImageUrl = "http://24.media.tumblr.com/tumblr_m82woaL5AD1rro1o5o1_1280.jpg",
-                    Key = "MTgwODA3MA"
-                },
-                new Cats()
-                {
-                    ImageUrl = "http://24.media.tumblr.com/tumblr_m29a9d62C81r2rj8po1_500.jpg",
-                    Key = "tt"
-                }
-            };
+                result = dbCtx.Cats.ToList();
+            }
+            return result;
+        }
+
+        [HttpGet("[action]")]
+        public Cat[] GetTwoRandowCats()
+        {
+            Cat[] cats = new Cat[2];
+
+            using (var dbCtx = new CatmashContext())
+            {
+                var firstCat = dbCtx.GetRandownCat();
+                var secondCat = dbCtx.GetRandownCat(firstCat);
+                cats[0] = firstCat;
+                cats[1] = secondCat;
+            }
             return cats;
         }
-     
 
-
-        public class Cats
+        [HttpGet("[action]")]
+        public void SaveVote(string WinningCatId, string LosingCatId)
         {
-            public string ImageUrl { get; set; }
-            public string Key      { get; set; }         
-        }
+            //check input
+            if (String.IsNullOrEmpty(WinningCatId) || String.IsNullOrEmpty(LosingCatId)) return;
 
-        
+            //a little bit overkill to use a om 
+            using (var dbCtx = new CatmashContext())
+            {
+                var winnigCat = dbCtx.GetCat(WinningCatId);
+                winnigCat.AddUpVote();
+
+                var LosingCat = dbCtx.GetCat(LosingCatId);
+                LosingCat.AddDownVote();
+
+                dbCtx.Cats.Update(winnigCat);
+                dbCtx.Cats.Update(LosingCat);
+
+                dbCtx.SaveChanges();
+            }
+        }
     }
 }
