@@ -12,11 +12,12 @@ namespace catmash.Model
 {
     public class CatmashContext : DbContext
     {
+        #region DBSet
         public DbSet<Cat> Cats { get; set; }
+        #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
             //TODO: put in a config file
             optionsBuilder.UseSqlite("Data Source=catmash.db");
         }
@@ -45,6 +46,30 @@ namespace catmash.Model
 
         }
 
+        #region methods
+        /// <summary>
+        /// Get a random cat
+        /// </summary>
+        /// <param name="NotThisCat">Execpt this cat</param>
+        /// <returns></returns>
+        public Cat GetRandownCat(Cat NotThisCat = null)
+        {
+            var rand = new Random();
+            var nbRemove = (NotThisCat==null)? 1 : 0;
+            var randomCat = this.Cats.OrderBy(cat => cat.Id)
+                            .Skip((int)((this.Cats.Count() - nbRemove) * rand.NextDouble()))
+                            .Where(cat => cat.Id != ((NotThisCat == null) ? string.Empty : NotThisCat.Id))
+                            .Take(1)
+                            .FirstOrDefault();
+
+            return randomCat;
+
+
+        }
+        #endregion
+
+
+        #region private methods
         /// <summary>
         /// Initilize from webservice
         /// </summary>
@@ -74,7 +99,7 @@ namespace catmash.Model
             var query = from j in json.SelectToken("images").Children()
                         select new Cat()
                         {
-                            Key = j["id"].Value<String>(),
+                            Id = j["id"].Value<String>(),
                             UrlImage = j["url"].Value<String>()
                         };
 
@@ -88,5 +113,11 @@ namespace catmash.Model
             await this.SaveChangesAsync();
 
         }
+
+        #endregion
+
+        
+
+
     }
 }

@@ -22,7 +22,21 @@ namespace catmash.Controllers
            
             return result;
         }
-     
+
+        [HttpGet("[action]")]
+        public Cat[] GetTwoRandowCats()
+        {
+            Cat[] cats = new Cat[2];
+
+            using (var dbCtx = new CatmashContext())
+            {
+                var firstCat = dbCtx.GetRandownCat();
+                var secondCat = dbCtx.GetRandownCat(firstCat);
+                cats[0] = firstCat;
+                cats[1] = secondCat;
+            }
+            return cats;
+        }
 
 
         
