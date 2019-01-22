@@ -12,9 +12,32 @@ namespace catmash.Model
 {
     public class CatmashContext : DbContext
     {
-        #region DBSet
+        #region public DBSet
         public DbSet<Cat> Cats { get; set; }
         #endregion
+
+        #region private static
+        //avoid multi checking 
+        private static Lazy<bool> DatabaseInitialized;
+        #endregion
+
+        static CatmashContext()
+        {
+            //singleton 
+            DatabaseInitialized = new Lazy<bool>(() =>
+            {
+                bool initialized = false;
+                using(var dbCtx = new CatmashContext(true))
+                {
+                    dbCtx.Database.EnsureCreated();
+                    initialized = dbCtx.Cats.Count() > 0;
+                }               
+
+                return initialized;
+            });
+        }
+
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,23 +48,11 @@ namespace catmash.Model
         /// <summary>
         /// Constructor 
         /// </summary>
-        public CatmashContext() : base()
+        public CatmashContext(bool WithoutCheckInitialized = false) : base()
         {
-
-            var count = 0;
-            #region table existance check
-            try
-            {
-                var created = this.Database.EnsureCreated();
-                count = this.Cats.Count();
-            }
-            catch { }
-            #endregion
-
-            if (count == 0)
+            if ((!WithoutCheckInitialized) &&(!DatabaseInitialized.Value))
             {
                 Initialize().Wait();
-
             }
 
         }
