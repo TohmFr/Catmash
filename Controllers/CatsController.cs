@@ -10,16 +10,13 @@ namespace catmash.Controllers
     public class CatsController : Controller
     {
         [HttpGet("[action]")]
-        public IEnumerable<Cat> Rank(int page =0)
+        public IEnumerable<Cat> Rank(int page = 0)
         {
-
-            IEnumerable<Cat> result =null;
-            using (var dbCtx= new CatmashContext())
+            IEnumerable<Cat> result = null;
+            using (var dbCtx = new CatmashContext())
             {
                 result = dbCtx.Cats.ToList();
-
             }
-           
             return result;
         }
 
@@ -38,7 +35,26 @@ namespace catmash.Controllers
             return cats;
         }
 
+        [HttpGet("[action]")]
+        public void SaveVote(string WinningCatId, string LosingCatId)
+        {
+            //check input
+            if (String.IsNullOrEmpty(WinningCatId) || String.IsNullOrEmpty(LosingCatId)) return;
 
-        
+            //a little bit overkill to use a om 
+            using (var dbCtx = new CatmashContext())
+            {
+                var winnigCat = dbCtx.GetCat(WinningCatId);
+                winnigCat.AddUpVote();
+
+                var LosingCat = dbCtx.GetCat(LosingCatId);
+                LosingCat.AddDownVote();
+
+                dbCtx.Cats.Update(winnigCat);
+                dbCtx.Cats.Update(LosingCat);
+
+                dbCtx.SaveChanges();
+            }
+        }
     }
 }

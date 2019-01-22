@@ -77,6 +77,17 @@ namespace catmash.Model
 
 
         }
+
+        /// <summary>
+        /// Get a cat by id
+        /// </summary>
+        /// <param name="Id">Id of cat</param>
+        /// <returns></returns>
+        public Cat GetCat(string Id)
+        {
+            return  this.Cats.Where(c => c.Id == Id).Take(1).FirstOrDefault();
+            
+        }
         #endregion
 
 
