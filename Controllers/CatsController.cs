@@ -35,7 +35,7 @@ namespace catmash.Controllers
             return cats;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public void SaveVote(string WinningCatId, string LosingCatId)
         {
             //check input

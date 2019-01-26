@@ -52,15 +52,22 @@ class Home extends Component {
 
 
     //Vote for a cat
-    vote(winner, cats, e) {
+    async vote(winner, cats, e) {
         //winnig cat
         const winnerId = winner.id;
 
         //losing cat
-        const losingId = cats.find(c => c.id !== winnerId).id;
+        const losingId = this.props.cats.find(c => c.id !== winnerId).id;
 
-        console.log(winnerId, losingId);
+        //vote
+        const vote = this.props.requestCatsVote(winnerId, losingId);
 
+        //todo:animation
+        
+
+        await vote;
+
+        this.props.requestRandomCats();
     }
 }
 

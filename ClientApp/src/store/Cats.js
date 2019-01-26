@@ -35,6 +35,23 @@ export const actionCreators = {
         const cats = await response.json();
 
         dispatch({ type: receiveRandomCatsType,  cats });
+    },
+    requestCatsVote: (winningCatId, losingCatId) => async (dispatch) => {
+        dispatch({ type: requestCatsVoteType });
+
+        const url = `api/cats/saveVote`;//?;
+
+        let data = new FormData();
+        data.append('winningCatId', winningCatId);
+        data.append('losingCatId', losingCatId);
+
+        const response = await fetch(url, {
+            method: 'POST',
+            body: data
+        });
+        //const response = await response.json();
+
+        dispatch({ type: receiveCatsVoteType });
     }
     
 };
