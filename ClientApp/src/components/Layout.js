@@ -1,10 +1,13 @@
 import React from 'react';
 import { Container } from 'reactstrap';
-import NavMenu from './NavMenu';
+//import NavMenu from './NavMenu';
+import HeaderComponent from './HeaderComponent';
+
+import './static/Layout.css';
 
 export default props => (
-  <div>
-    <NavMenu />
+  <div >
+    <HeaderComponent />
     <Container>
       {props.children}
     </Container>

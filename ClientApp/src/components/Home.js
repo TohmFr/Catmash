@@ -1,9 +1,18 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 //import { Link } from 'react-router-dom';
 import { actionCreators } from '../store/Cats';
+import ReactSVG from 'react-svg'
+import CatSvg from './static/cat.svg';
+import './static/Home.css';
 
+
+const svgStyle = {
+    width: '0',
+    height: '0'
+};
 
 class Home extends Component {
 
@@ -21,17 +30,17 @@ class Home extends Component {
     ensureDataFetched() {
         this.props.requestRandomCats();
     }
-
+   
 
 
     //Render
     render() {
         return (
             <div>
-                <h1>CatsVote</h1>
                 {this.renderCats(this.props)}
 
             </div>
+            
         );
     }
 
@@ -40,13 +49,15 @@ class Home extends Component {
     renderCats(props) {
         const cats = props.cats;
         return (
-            <div>
+            <section className="catsVotesWrapper">
                 {cats.map(cat =>
-                    <div key={cat.id} onClick={(e) => this.vote(cat, cats, e)}>
-                        <img src={cat.urlImage} alt="cat pic" />
+                    <div className="catVotePart" key={cat.id}>
+                        <div onClick={(e) => this.vote(cat, cats, e)} className="cat">
+                            <img src={cat.urlImage} alt="cat pic" />
+                        </div>
                     </div>
                 )}
-            </div>
+            </section>
         );
     }
 
