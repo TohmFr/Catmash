@@ -1,8 +1,8 @@
 ﻿const requestCatsRankType = 'REQUEST_CATS_RANK';
 const receiveCatsRankType = 'RECEIVE_CATS_RANK';
 
-const requestCatsRandomType = 'REQUEST_CATS_RANDOM';
-const receiveCatsRandomType = 'RECEIVE_CATS_RANDOM';
+const requestRandomCatsType = 'REQUEST_CATS_RANDOM';
+const receiveRandomCatsType = 'RECEIVE_CATS_RANDOM';
 
 const requestCatsVoteType = 'REQUEST_CATS_VOTE';
 const receiveCatsVoteType = 'REQUEST_CATS_VOTE';
@@ -26,7 +26,17 @@ export const actionCreators = {
         const cats = await response.json();
 
         dispatch({ type: receiveCatsRankType, pageIndex, cats });
+    },
+    requestRandomCats: () => async (dispatch) => {
+        dispatch({ type: requestRandomCatsType });
+
+        const url = `api/cats/getTwoRandowCats`;
+        const response = await fetch(url);
+        const cats = await response.json();
+
+        dispatch({ type: receiveRandomCatsType,  cats });
     }
+    
 };
 
 export const reducer = (state, action) => {
@@ -50,6 +60,20 @@ export const reducer = (state, action) => {
         };
     }
 
+    if (action.type === requestRandomCatsType) {
+        return {
+            ...state,
+            isLoading: true
+        };
+
+    }
+    if (action.type === receiveRandomCatsType) {
+        return {
+            ...state,
+            cats: action.cats,
+            isLoading: false
+        };
+    }
 
 
     return state;

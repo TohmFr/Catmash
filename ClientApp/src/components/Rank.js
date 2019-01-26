@@ -34,7 +34,6 @@ class Rank extends Component {
 }
 //   
 function renderCatsRank(props) {    
-    console.log(props);
     return (
         <ul>
             {props.cats.map(cat =>
