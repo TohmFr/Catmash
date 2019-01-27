@@ -7,6 +7,6 @@ import Rank from './components/Rank';
 export default () => (
   <Layout>
     <Route exact path='/' component={Home} />
-    <Route path='/rank/:pageIndex?' component={Rank} />
+        <Route path='/rank/:pageIndex?' component={Rank} />
   </Layout>
 );

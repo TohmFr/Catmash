@@ -7,18 +7,18 @@ const receiveRandomCatsType = 'RECEIVE_CATS_RANDOM';
 const requestCatsVoteType = 'REQUEST_CATS_VOTE';
 const receiveCatsVoteType = 'REQUEST_CATS_VOTE';
 
-const initialState = { cats: [], isLoading: false };
+const initialState = { cats: [], catsRandom: [], isLoading: false };
 
 export const actionCreators = {
     requestCatsRank: pageIndex => async (dispatch, getState) => {
    
         
-        if (pageIndex === getState().cats.pageIndex) {
+        if (pageIndex!==-1 && pageIndex === getState().cats.pageIndex) {
             // Don't issue a duplicate request (we already have or are loading the requested data)
             return;
         }
       
-
+        if (pageIndex === -1) pageIndex = 0;
         dispatch({ type: requestCatsRankType, pageIndex });
 
         const url = `api/cats/rank?page=${pageIndex}`;
@@ -87,7 +87,7 @@ export const reducer = (state, action) => {
     if (action.type === receiveRandomCatsType) {
         return {
             ...state,
-            cats: action.cats,
+            catsRandom: action.cats,
             isLoading: false
         };
     }

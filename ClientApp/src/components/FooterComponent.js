@@ -14,7 +14,7 @@ class FooterComponent extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <Route exact path="/" render={() =>this.renderGoAnotherPage('/rank')} />
+                <Route exact path="/" render={() => this.renderGoAnotherPage('/rank')} />
                 <Route path="/rank" render={() =>  this.renderGoAnotherPage('/') } />
             </React.Fragment>                     
         );

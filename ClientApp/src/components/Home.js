@@ -46,7 +46,7 @@ class Home extends Component {
 
     //Render part
     renderCats(props) {
-        const cats = props.cats;
+        const cats = props.catsRandom;
         return (
             <section className="catsVotesWrapper">
                 {cats.map(cat =>
@@ -67,7 +67,7 @@ class Home extends Component {
         const winnerId = winner.id;
 
         //losing cat
-        const losingId = this.props.cats.find(c => c.id !== winnerId).id;
+        const losingId = this.props.catsRandom.find(c => c.id !== winnerId).id;
 
         //vote
         const vote = this.props.requestCatsVote(winnerId, losingId);
