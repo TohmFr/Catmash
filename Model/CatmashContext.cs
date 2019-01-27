@@ -21,6 +21,10 @@ namespace catmash.Model
         private static Lazy<bool> DatabaseInitialized;
         #endregion
 
+        #region Const
+        private const int NB_RESULT_BY_PAGE = 10;
+        #endregion
+
         static CatmashContext()
         {
             //singleton 
@@ -62,7 +66,7 @@ namespace catmash.Model
         /// Get a random cat
         /// </summary>
         /// <param name="NotThisCat">Execpt this cat</param>
-        /// <returns></returns>
+        /// <returns>a random cat</returns>
         public Cat GetRandownCat(Cat NotThisCat = null)
         {
             var rand = new Random();
@@ -82,12 +86,29 @@ namespace catmash.Model
         /// Get a cat by id
         /// </summary>
         /// <param name="Id">Id of cat</param>
-        /// <returns></returns>
+        /// <returns>a cat</returns>
         public Cat GetCat(string Id)
         {
             return  this.Cats.Where(c => c.Id == Id).Take(1).FirstOrDefault();
             
         }
+
+        /// <summary>
+        /// Get list winner cat
+        /// </summary>
+        /// <param name="page">page index</param>
+        /// <returns>list of cat</returns>
+        public IList<Cat> GetCatWinner(int page=0)
+        {
+            var query = this.Cats.OrderByDescending(c => c.Ratio)
+                                  .ThenByDescending(c => c.UpVote)
+                                  .Skip(page * NB_RESULT_BY_PAGE)
+                                  .Take(NB_RESULT_BY_PAGE);
+                                  
+             
+            return query.ToList();
+        }
+        
         #endregion
 
 
