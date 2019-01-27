@@ -1,0 +1,14 @@
+﻿:root {
+    --main-text-color: #3D4F63;
+    --bg-color: #EBEFF0;
+}
+
+body {
+    color: var(--main-text-color);
+    font-family: Helvetica;
+}
+
+.injected-svg{
+    width:0;
+    height:0;
+}

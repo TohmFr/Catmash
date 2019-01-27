@@ -15,7 +15,7 @@ namespace catmash.Controllers
             IEnumerable<Cat> result = null;
             using (var dbCtx = new CatmashContext())
             {
-                result = dbCtx.Cats.ToList();
+                result = dbCtx.GetCatWinner(page);
             }
             return result;
         }
@@ -35,7 +35,7 @@ namespace catmash.Controllers
             return cats;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         public void SaveVote(string WinningCatId, string LosingCatId)
         {
             //check input

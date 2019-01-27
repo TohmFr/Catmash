@@ -1,0 +1,16 @@
+﻿footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+    footer span {
+        display: inline-block;
+        background: #ffffff;
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        box-shadow: 0 0 5px 5px var(--bg-color);
+    }
