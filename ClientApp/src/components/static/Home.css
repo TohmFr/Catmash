@@ -9,14 +9,6 @@
     align-items: center;
     justify-content: center;
 }
-footer {
-    position: absolute;
-    z-index:101;
-    bottom:0;
-    display:block;
-    background:white;
-
-}
 
 .catsVotesWrapper .catVotePart {
     height: 100%;

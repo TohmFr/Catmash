@@ -36,10 +36,9 @@ class Home extends Component {
     //Render
     render() {
         return (
-            <div>
+            <React.Fragment>
                 {this.renderCats(this.props)}
-
-            </div>
+            </React.Fragment>
             
         );
     }
