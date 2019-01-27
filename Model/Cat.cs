@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,8 +10,15 @@ namespace catmash.Model
     public class Cat
     {
         #region properties
-        [System.ComponentModel.DataAnnotations.Key]
-        public string Id       { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key, Column(Order = 0)]
+        public int Id { get; set; }
+
+
+        //id from webservice
+        public string Key       { get; set; }
+
+
         public long UpVote      { get; set; }
         public long DownVote    { get; set; }
         public long Vote        { get; set; }
@@ -38,7 +47,7 @@ namespace catmash.Model
         #region private method
         private void RefreshRation()
         {
-            this.Ratio = this.UpVote / this.Vote;
+            this.Ratio = (double)this.UpVote / (double) this.Vote ;
         }
         #endregion
 

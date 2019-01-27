@@ -36,10 +36,10 @@ namespace catmash.Controllers
         }
 
         [HttpPost("[action]")]
-        public void SaveVote(string WinningCatId, string LosingCatId)
+        public void SaveVote(int WinningCatId=-1, int LosingCatId=-1)
         {
             //check input
-            if (String.IsNullOrEmpty(WinningCatId) || String.IsNullOrEmpty(LosingCatId)) return;
+            if (WinningCatId ==-1 || LosingCatId == -1) return;
 
             //a little bit overkill to use a om 
             using (var dbCtx = new CatmashContext())

@@ -35,6 +35,13 @@ namespace catmash.Model
                 {
                     dbCtx.Database.EnsureCreated();
                     initialized = dbCtx.Cats.Count() > 0;
+
+                    if (!initialized)
+                    {
+                        dbCtx.Initialize().Wait();
+
+                        initialized = dbCtx.Cats.Count() > 0;
+                    }
                 }               
 
                 return initialized;
@@ -56,7 +63,7 @@ namespace catmash.Model
         {
             if ((!WithoutCheckInitialized) &&(!DatabaseInitialized.Value))
             {
-                Initialize().Wait();
+                throw new Exception("No data, no app");
             }
 
         }
@@ -73,7 +80,7 @@ namespace catmash.Model
             var nbRemove = (NotThisCat==null)? 1 : 0;
             var randomCat = this.Cats.OrderBy(cat => cat.Id)
                             .Skip((int)((this.Cats.Count() - nbRemove) * rand.NextDouble()))
-                            .Where(cat => cat.Id != ((NotThisCat == null) ? string.Empty : NotThisCat.Id))
+                            .Where(cat => cat.Id != ((NotThisCat == null) ? -1 : NotThisCat.Id))
                             .Take(1)
                             .FirstOrDefault();
 
@@ -87,7 +94,7 @@ namespace catmash.Model
         /// </summary>
         /// <param name="Id">Id of cat</param>
         /// <returns>a cat</returns>
-        public Cat GetCat(string Id)
+        public Cat GetCat(int Id)
         {
             return  this.Cats.Where(c => c.Id == Id).Take(1).FirstOrDefault();
             
@@ -100,8 +107,9 @@ namespace catmash.Model
         /// <returns>list of cat</returns>
         public IList<Cat> GetCatWinner(int page=0)
         {
-            var query = this.Cats.OrderByDescending(c => c.Ratio)
-                                  .ThenByDescending(c => c.UpVote)
+            var query = this.Cats.Where(c=>c.Vote>0)
+                                  .OrderByDescending(c => c.Ratio)
+                                  .ThenByDescending( c => c.UpVote)
                                   .Skip(page * NB_RESULT_BY_PAGE)
                                   .Take(NB_RESULT_BY_PAGE);
                                   
@@ -142,7 +150,7 @@ namespace catmash.Model
             var query = from j in json.SelectToken("images").Children()
                         select new Cat()
                         {
-                            Id = j["id"].Value<String>(),
+                            Key = j["id"].Value<String>(),
                             UrlImage = j["url"].Value<String>()
                         };
 
