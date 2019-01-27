@@ -15,7 +15,7 @@ namespace catmash.Controllers
             IEnumerable<Cat> result = null;
             using (var dbCtx = new CatmashContext())
             {
-                result = dbCtx.Cats.ToList();
+                result = dbCtx.GetCatWinner(page);
             }
             return result;
         }
